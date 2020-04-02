@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pathlib
 import os
+import sys
 import csv
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.model_selection import train_test_split
@@ -13,36 +14,44 @@ from keras.layers import Dense
 import librosa.display
 import IPython.display as ipd
 import warnings
+from pathlib import Path
+
+path = Path(__file__)
+
+
 warnings.filterwarnings('ignore')
 
 genres = 'cel cla flu gac gel org pia sax tru vio voi'.split()
+
+
 
 # create specgrams and save it in appropriate directories
 def create_specgrams():
     cmap = plt.get_cmap('inferno')
     for g in genres:
-        for filename in os.listdir(f'C:/Users/Lenovo/Desktop/Magisterka/Sieci neuronowe/IRMAS-TrainingData/{g}'):
-            name = f'C:/Users/Lenovo/Desktop/Magisterka/Sieci neuronowe/IRMAS-TrainingData/{g}/{filename}'
+        for filename in os.listdir(str(path.parent.parent) + f'\\IRMAS-TrainingData\\{g}'):
+            name = str(path.parent.parent) + f'\\IRMAS-TrainingData\\{g}\\{filename}'
             y, sr = librosa.load(name, mono=True, duration=5)
-            plt.specgram(y, NFFT=2048, Fs=2, Fc=0, noverlap=128, cmap=cmap, sides='default', mode='default', scale='dB');
+            plt.specgram(y, NFFT=2048, Fs=2, Fc=0, noverlap=128, cmap=cmap, sides='default', mode='default', scale='dB')
             plt.show()
-            plt.axis('off');
-            plt.savefig(f'C:/Users/Lenovo/Desktop/Magisterka/Sieci neuronowe/IRMAS-TrainingDataPng/{g}/{filename[:-3].replace(".", "")}.png')
+            plt.axis('off')
+            plt.savefig(str(path.parent.parent) + f'\\IRMAS-TrainingData\\IRMAS-TrainingDataPng\\{g}\\{filename[:-3].replace(".", "")}.png')
             plt.clf()
 
 def create_specgrams_patki():
     for g in genres:
-        for filename in os.listdir(f'C:/Users/Lenovo/Desktop/Magisterka/Sieci neuronowe/IRMAS-TrainingData/{g}'):
-            audio_path = 'C:/Users/Lenovo/Desktop/Magisterka/Sieci neuronowe/IRMAS-TrainingData/cel/[cel][cla]0001__1.wav'
+        for filename in os.listdir(str(path.parent.parent) + f'\\IRMAS-TrainingData\\{g}'):
+            audio_path = str(path.parent.parent) + f'\\IRMAS-TrainingData\\{g}\\{filename}'
             x, sr = librosa.load(audio_path)
             hop_length = 512
             n_mels = 128
             n_fft = 2048
             S = librosa.feature.melspectrogram(x, sr=sr, n_fft=n_fft, hop_length=hop_length, n_mels=n_mels)
             S_DB = librosa.power_to_db(S, ref=np.max)
-            librosa.display.specshow(S_DB, sr=sr, hop_length=hop_length);
-            plt.savefig(f'C:/Users/Lenovo/Desktop/Magisterka/Sieci neuronowe/IRMAS-TrainingDataPngPatki/{g}/{filename[:-3].replace(".", "")}.png')
+            librosa.display.specshow(S_DB, sr=sr, hop_length=hop_length)
+            plt.savefig(str(path.parent.parent) + f'\\IRMAS-TrainingDataPng\\{g}\\{filename[:-3].replace(".", "")}.png', bbox_inches='tight', pad_inches=0)
             plt.clf()
+        print(f"created {g}")
 
 # defines some params out of .wav file
 def specific_data(songname, g = ' '):
