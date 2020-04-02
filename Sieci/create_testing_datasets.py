@@ -29,11 +29,7 @@ def create_datasets():
         audio_path = str(path.parent.parent) + f'\\IRMAS-TestingData-Part1\\Part1\\{filename}'
         i = i + 1
         if(filename[-3:] == 'wav'): 
-            x, sr = librosa.load(audio_path)
-            hop_length = 512
-            n_mels = 128
-            n_fft = 2048
-            testing_X.append(librosa.feature.melspectrogram(x, sr=sr, n_fft=n_fft, hop_length=hop_length, n_mels=n_mels))
+            testing_X.append(get_spectrogram_data(audio_path))
         else:
             testing_y.append(get_categories(audio_path))
 
@@ -44,6 +40,14 @@ def get_categories(audio_path):
         for instrument in data:
             result[instruments_set.index(instrument.replace('\t','').replace('\n', ''))] = 1
         return result
+
+def get_spectrogram_data(audio_path):
+    x, sr = librosa.load(audio_path)
+    hop_length = 512
+    n_mels = 128
+    n_fft = 2048
+    return librosa.feature.melspectrogram(x, sr=sr, n_fft=n_fft, hop_length=hop_length, n_mels=n_mels)
+
 
 create_datasets()
 np.save(str(Path(__file__).parent) + "\\test_y", testing_y)

@@ -27,13 +27,8 @@ def create_datasets():
         for filename in os.listdir(str(Path(__file__).parent.parent) + f'\\IRMAS-TrainingData\\{g}'):
             print(filename)
             audio_path = str(path.parent.parent) + f'\\IRMAS-TrainingData\\{g}\\{filename}'
-            if(filename[-3:] == 'wav'): 
-                x, sr = librosa.load(audio_path)
-                hop_length = 512
-                n_mels = 128
-                n_fft = 2048
-                testing_X.append(librosa.feature.melspectrogram(x, sr=sr, n_fft=n_fft, hop_length=hop_length, n_mels=n_mels))
-                testing_y.append(get_categories(filename))
+            testing_X.append(get_spectrogram_data(audio_path))
+            testing_y.append(get_categories(filename))
         
 def get_categories(filename):
     result = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -44,6 +39,13 @@ def get_categories(filename):
         except:
             print(filename)
     return result
+
+def get_spectrogram_data(audio_path):
+    x, sr = librosa.load(audio_path)
+    hop_length = 512
+    n_mels = 128
+    n_fft = 2048
+    return librosa.feature.melspectrogram(x, sr=sr, n_fft=n_fft, hop_length=hop_length, n_mels=n_mels)
 
 create_datasets()
 
