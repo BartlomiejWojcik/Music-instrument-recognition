@@ -18,44 +18,34 @@ instruments_set = ('cel', 'cla', 'flu', 'gac', 'gel', 'org', 'pia', 'sax', 'tru'
 genres = 'cel cla flu gac gel org pia sax tru vio voi'.split()
 testing_X = []
 testing_y = []
+i = 0
 
-def create_spectograms():
-    for filename in os.listdir(str(path.parent.parent) + f'\\IRMAS-TestingData-Part\\Part1\\'):
+# TODO: Change audio duration to 3s 
+
+def create_datasets():
+    i = 0
+    for filename in os.listdir(str(path.parent.parent) + f'\\IRMAS-TestingData-Part1\\Part1\\'):
+        print(filename)
         audio_path = str(path.parent.parent) + f'\\IRMAS-TestingData-Part1\\Part1\\{filename}'
+        i = i + 1
         if(filename[-3:] == 'wav'): 
             x, sr = librosa.load(audio_path)
             hop_length = 512
             n_mels = 128
             n_fft = 2048
-            S = librosa.feature.melspectrogram(x, sr=sr, n_fft=n_fft, hop_length=hop_length, n_mels=n_mels)
-            S_DB = librosa.power_to_db(S, ref=np.max)
-            librosa.display.specshow(S_DB, sr=sr, hop_length=hop_length)
-            plt.savefig(str(path.parent.parent) + f'\\IRMAS-TestingDataPng\\{filename[:-3].replace(".", "")}.png', bbox_inches='tight', pad_inches=0)
-            plt.clf()
+            testing_X.append(librosa.feature.melspectrogram(x, sr=sr, n_fft=n_fft, hop_length=hop_length, n_mels=n_mels))
         else:
-            copyfile(audio_path, str(path.parent.parent) + f'\\IRMAS-TestingDataPng\\{filename[:-3].replace(".", "")}.txt')
+            testing_y.append(get_categories(audio_path))
 
-def create_datasets():
-    for filename in os.listdir(str(path.parent.parent) + f'\\IRMAS-TestingDataPng\\'):
-        if(filename[-3:] == 'png'):
-            testing_X.append(imageio.imread(str(Path(__file__).parent.parent) + f"\\IRMAS-TestingDataPng\\{filename}", as_gray=False, pilmode="RGB"))
-        else:
-            testing_y.append(get_categories(filename))
-        print(filename)
-
-def get_categories(filename):
-    with open(str(Path(__file__).parent.parent) + f"\\IRMAS-TestingDataPng\\{filename}", 'r') as file:
+def get_categories(audio_path):
+    with open(audio_path, 'r') as file:
         result = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         data = file.readlines()
         for instrument in data:
             result[instruments_set.index(instrument.replace('\t','').replace('\n', ''))] = 1
         return result
 
-#   UNCOMMENT TO CREATE TESTING SPECTOGRAMS
-#   create_spectograms()
-
-#   UNCOMMENT TO CREATE TESTING DATASETS
-# create_datasets()
-# np.save(str(Path(__file__).parent) + "\\test_y", testing_y)
-# np.save(str(Path(__file__).parent) + "\\test_X", testing_X)
+create_datasets()
+np.save(str(Path(__file__).parent) + "\\test_y", testing_y)
+np.save(str(Path(__file__).parent) + "\\test_X", testing_X)
 
