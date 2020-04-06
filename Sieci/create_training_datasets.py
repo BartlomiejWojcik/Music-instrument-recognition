@@ -1,18 +1,12 @@
-import librosa
+import librosa, os, sys, warnings, imageio, librosa, re, imageio, librosa
 import numpy as np
 import matplotlib.pyplot as plt
-import os
-import sys
 import librosa.display
 import IPython.display as ipd
-import warnings
 from pathlib import Path
 from shutil import copyfile
-import imageio
-import librosa
-import re
 
-path = Path(__file__)
+path = Path(os.path.abspath(''))
 
 warnings.filterwarnings('ignore')
 
@@ -24,9 +18,9 @@ testing_y = []
 def create_datasets():
     for g in genres:
         print(g)
-        for filename in os.listdir(str(Path(__file__).parent.parent) + f'\\IRMAS-TrainingData\\{g}'):
+        for filename in os.listdir(str(path) + f'\\IRMAS-TrainingData\\{g}'):
             print(filename)
-            audio_path = str(path.parent.parent) + f'\\IRMAS-TrainingData\\{g}\\{filename}'
+            audio_path = str(path) + f'\\IRMAS-TrainingData\\{g}\\{filename}'
             testing_X.append(get_spectrogram_data(audio_path))
             testing_y.append(get_categories(filename))
         
@@ -41,14 +35,10 @@ def get_categories(filename):
     return result
 
 def get_spectrogram_data(audio_path):
-    x, sr = librosa.load(audio_path)
-    hop_length = 512
-    n_mels = 128
-    n_fft = 2048
-    return librosa.feature.melspectrogram(x, sr=sr, n_fft=n_fft, hop_length=hop_length, n_mels=n_mels)
+    x, sr = librosa.load(audio_path, duration=3)
+    return librosa.feature.melspectrogram(x, sr=sr, n_fft=2048, hop_length=512, n_mels=128)
 
 create_datasets()
-
-np.save(str(Path(__file__).parent) + "\\train_y", testing_y)
-np.save(str(Path(__file__).parent) + "\\train_X", testing_X)
+np.save(str(path) + "\\train_y", testing_y)
+np.save(str(path) + "\\train_X", testing_X)
 

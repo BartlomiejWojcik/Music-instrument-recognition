@@ -2,3 +2,6 @@ test_X.npy
 test_y.npy
 train_X.npy
 train_y.npy
+IRMAS-TrainingData/
+IRMAS-TestingData-Part1/
+.ipynb_checkpoints/
