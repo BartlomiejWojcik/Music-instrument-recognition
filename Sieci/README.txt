@@ -1,6 +1,8 @@
 Przygotowywanie danych:
 
--create_testing_datasets.py - skrypt do przygotowania danych testowych na podstawie spektoramów (z folderów: IRMAS-TestingData-Part1, IRMAS-TestingData-Part2, IRMAS-TestingData-Part3)
+1) spektrogramy
+
+-create_testing_datasets.py - skrypt do przygotowania danych testowych na podstawie spektoramów(z folderów: IRMAS-TestingData-Part1, IRMAS-TestingData-Part2, IRMAS-TestingData-Part3)
 -create_training_datasets.py - skrypt do przygotowania danych treningowych na podstawie spektrogramów(z folderu IRMAS-TrainingData)
 
 Powyższe skrypty generują odpowiednie pliki danych npy:
@@ -10,10 +12,15 @@ Powyższe skrypty generują odpowiednie pliki danych npy:
 -train_X.npy
 -train_y.npy
 
-W przypadku danych dla modelu opartego na parametrach przetworzone dane znajdują się w plikach csv:
+2) parametry
+
+-create_testing_datasets_parameters.py - skrypt do przygotowania danych testowych na podstawie parametrów(z folderów: IRMAS-TestingData-Part1, IRMAS-TestingData-Part2, IRMAS-TestingData-Part3)
+-create_training_datasets_parameters.py - skrypt do przygotowania danych treningowych na podstawie parametrów(z folderu IRMAS-TrainingData)
+
+Powyższe skrypty generują odpowiednie pliki danych csv:
 
 -param_data_train.csv
--param_data_test.csv-
+-param_data_test.csv
 
 Tworzenie modeli:
 
