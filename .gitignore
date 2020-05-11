@@ -1,0 +1,12 @@
+DataSets/IRMAS-TestingData-Part1
+DataSets/IRMAS-TestingData-Part2
+DataSets/IRMAS-TestingData-Part3
+DataSets/IRMAS-TrainingData
+
+Networks/.ipynb_checkpoints
+Networks/.idea
+Networks/__pycache__
+Networks/test_x.npy
+Networks/test_y.npy
+Networks/train_x.npy
+Networks/train_y.npy
